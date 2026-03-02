@@ -3,70 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Acreditación Zarelly FEPUC 🎓</title>
+    <title>Acreditación Oficial: Zarelly 🎓</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Dancing+Script:wght@700&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        :root { --pucp: #002d5e; --gold: #c5a059; }
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #111; font-family: 'Montserrat', sans-serif; }
+        :root { --pucp: #002d5e; --gold: #c5a059; --bg: #1a1a1a; }
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            overflow: hidden; background: var(--bg); 
+            font-family: 'Montserrat', sans-serif;
+            user-select: none; -webkit-user-select: none;
+        }
         
-        /* Capa para limpiar (Scratch) */
+        /* Capa de Limpieza */
         #scratch-container { position: absolute; inset: 0; z-index: 20; touch-action: none; }
-        #canvas-fog { width: 100%; height: 100%; cursor: crosshair; }
+        #canvas-fog { width: 100%; height: 100%; cursor: url('https://cur.cursors-4u.net/others/oth-2/oth191.cur'), auto; }
 
-        /* Contenido debajo de la niebla */
+        /* Contenido Revelado */
         #under-content {
             position: absolute; inset: 0; z-index: 10;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             background: #fdfbf0; color: #333; text-align: center; padding: 20px;
         }
 
-        .title-reveal { font-family: 'Cinzel'; color: var(--gold); font-size: 1.2rem; letter-spacing: 3px; margin-bottom: 20px; }
+        .header-pucp { font-family: 'Cinzel'; color: var(--pucp); font-size: 1.1rem; letter-spacing: 3px; border-bottom: 2px solid var(--gold); padding-bottom: 10px; margin-bottom: 20px; }
         
-        /* El Sello */
+        /* Área del Sello Dinámica */
         #seal-area {
-            width: 150px; height: 150px; border: 2px dashed var(--gold);
+            width: 140px; height: 140px; border: 3px solid var(--gold);
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
             margin: 20px auto; position: relative; cursor: pointer;
-            transition: 0.5s; opacity: 0; /* Aparece solo al limpiar */
+            transition: all 0.5s ease; opacity: 0; transform: scale(0.8);
         }
-        #seal-area.visible { opacity: 1; }
-        .seal-wax {
-            width: 100px; height: 100px; background: #8b0000; border-radius: 50%;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.5), 0 5px 15px rgba(0,0,0,0.3);
-            display: flex; align-items: center; justify-content: center; color: var(--gold);
-            font-family: 'Cinzel'; font-size: 2rem; transform: scale(0.9); transition: 0.2s;
+        #seal-area.visible { opacity: 1; transform: scale(1); animation: pulse 2s infinite; }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(197, 160, 89, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(197, 160, 89, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(197, 160, 89, 0); }
         }
-        #seal-area:active .seal-wax { transform: scale(1.1); background: #a50000; }
 
-        /* --- DIPLOMA FINAL --- */
+        .seal-wax {
+            width: 110px; height: 110px; background: #8b0000; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; color: var(--gold);
+            font-family: 'Cinzel'; font-size: 2.2rem; transition: 0.2s;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
+        }
+        #seal-area:active .seal-wax { transform: scale(0.9); background: #600000; }
+
+        /* Diploma Estilo Pergamino */
         #diploma-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.95);
+            position: fixed; inset: 0; background: rgba(0,0,0,0.9);
             z-index: 100; display: none; align-items: center; justify-content: center; padding: 15px;
         }
         .diploma {
-            background: white; width: 100%; max-width: 600px; padding: 40px;
-            border: 15px solid var(--pucp); box-sizing: border-box; text-align: center;
-            position: relative; animation: openDiploma 1s ease-out forwards;
+            background: #fff; width: 100%; max-width: 650px; padding: 40px;
+            border: 20px solid var(--pucp); outline: 5px solid var(--gold);
+            outline-offset: -15px; position: relative; text-align: center;
+            box-shadow: 0 0 50px rgba(0,0,0,1);
         }
-        @keyframes openDiploma { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .diploma h1 { font-family: 'Cinzel'; color: var(--pucp); font-size: 1.8rem; margin: 10px 0; }
-        .diploma .name { font-family: 'Dancing Script'; font-size: 3rem; color: var(--gold); margin: 15px 0; }
-        .diploma p { line-height: 1.6; font-size: 1rem; color: #444; }
+        .diploma h1 { font-family: 'Cinzel'; color: var(--pucp); font-size: 2.2rem; margin: 10px 0; }
+        .diploma .name { font-family: 'Dancing Script'; font-size: 3.5rem; color: var(--gold); margin: 20px 0; }
+        .diploma p { line-height: 1.8; font-size: 1.1rem; color: #222; max-width: 80%; margin: 0 auto; }
 
-        #instructions { position: fixed; bottom: 40px; width: 100%; text-align: center; color: white; z-index: 30; pointer-events: none; text-shadow: 0 2px 5px black; }
+        #instructions { 
+            position: fixed; bottom: 30px; width: 100%; text-align: center; 
+            color: white; z-index: 30; pointer-events: none; 
+            font-size: 0.9rem; letter-spacing: 1px;
+            background: rgba(0,0,0,0.5); padding: 10px 0;
+        }
     </style>
 </head>
 <body>
 
-<div id="instructions">Limpia la pantalla para revelar tu nombramiento...</div>
+<div id="instructions">Usa tu dedo o mouse para limpiar el camino hacia tu éxito...</div>
 
 <div id="under-content">
-    <div class="title-reveal">FEDERACIÓN DE ESTUDIANTES PUCP</div>
-    <p style="max-width: 300px; font-weight: 600;">Has demostrado valor y compromiso. <br> Presiona tu sello para oficializar.</p>
+    <div class="header-pucp">RECONOCIMIENTO ESTUDIANTIL</div>
+    <p style="font-weight: 600; color: #555;">Mi Zazita, tu esfuerzo ha dado frutos.<br>Oficializa tu cargo manteniendo presionado el sello.</p>
     
     <div id="seal-area">
-        <div class="seal-wax" id="wax">Z</div>
+        <div class="seal-wax">Z</div>
     </div>
 </div>
 
@@ -76,93 +93,99 @@
 
 <div id="diploma-overlay">
     <div class="diploma">
-        <h3 style="letter-spacing: 4px; margin: 0; color: #666;">CERTIFICADO DE LOGRO</h3>
-        <h1>DELEGADA FEPUC</h1>
+        <div style="font-size: 0.7rem; letter-spacing: 5px; color: #888;">CREDITACIÓN FEPUC 2026</div>
+        <h1>DIPLOMA DE EXCELENCIA</h1>
         <div class="name">Zarelly</div>
         <p>
-            Por elección y mérito propio, se reconoce a <b>Zarelly</b> como pieza fundamental en la representación estudiantil. <br><br>
-            Tu capacidad para liderar con sabiduría y empatía te hace digna de este cargo. Este es el inicio de una etapa brillante.
+            Se otorga el presente reconocimiento por su destacada labor y nombramiento como <b>Delegada FEPUC 2026</b>. <br><br>
+            Tu liderazgo es la mezcla perfecta entre inteligencia y empatía. Estoy seguro de que harás una gestión impecable mi amor. Te amo y estoy orgulloso de ti :3.
         </p>
-        <div style="margin-top: 30px; font-family: 'Dancing Script'; font-size: 1.5rem; border-top: 1px solid #ccc; display: inline-block; padding-top: 10px;">
-            José, con orgullo.
+        <div style="margin-top: 40px; font-family: 'Dancing Script'; font-size: 1.8rem; border-top: 1px solid #333; display: inline-block; padding-top: 5px;">
+            José
         </div>
         <br>
-        <button onclick="location.reload()" style="margin-top:20px; border:none; background:var(--pucp); color:white; padding:10px 20px; cursor:pointer;">REPETIR ❤️</button>
+        <button onclick="location.reload()" style="margin-top:25px; border:none; background:var(--gold); color:white; padding:10px 30px; cursor:pointer; font-family:'Cinzel';">VOLVER ❤️</button>
     </div>
 </div>
 
 <script>
     const canvas = document.getElementById('canvas-fog');
     const ctx = canvas.getContext('2d');
-    let width, height;
-    let scratchedPercent = 0;
     const sealArea = document.getElementById('seal-area');
+    let isDrawing = false;
 
     function init() {
-        width = window.innerWidth;
-        height = window.innerHeight;
-        canvas.width = width;
-        canvas.height = height;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        ctx.fillStyle = '#222'; // Niebla más elegante
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
         
-        // Rellenar con "niebla" gris
+        // Efecto de texto oculto en la niebla
+        ctx.font = 'bold 15px Montserrat';
         ctx.fillStyle = '#333';
-        ctx.fillRect(0, 0, width, height);
-        
-        // Texto de ayuda en la niebla
-        ctx.font = '20px Montserrat';
-        ctx.fillStyle = '#555';
         ctx.textAlign = 'center';
-        ctx.fillText('EL ESFUERZO TIENE RECOMPENSA', width/2, height/2);
+        ctx.fillText('TRABAJO • LIDERAZGO • COMPROMISO', canvas.width/2, canvas.height/2);
+    }
+
+    function getPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        return {
+            x: (e.touches ? e.touches[0].clientX : e.clientX) - rect.left,
+            y: (e.touches ? e.touches[0].clientY : e.clientY) - rect.top
+        };
     }
 
     function scratch(e) {
-        const x = e.touches ? e.touches[0].clientX : e.clientX;
-        const y = e.touches ? e.touches[0].clientY : e.clientY;
-        
+        if (!isDrawing && e.type !== 'touchmove') return;
+        const pos = getPos(e);
         ctx.globalCompositeOperation = 'destination-out';
         ctx.beginPath();
-        ctx.arc(x, y, 40, 0, Math.PI * 2);
+        ctx.arc(pos.x, pos.y, 45, 0, Math.PI * 2);
         ctx.fill();
-
-        // Check de progreso
-        checkScratched();
+        checkProgress();
     }
 
-    function checkScratched() {
-        // Para no saturar, chequeamos cada cierto tiempo
-        const imageData = ctx.getImageData(0, 0, width, height).data;
-        let count = 0;
-        for (let i = 0; i < imageData.length; i += 100) { // Muestreo
-            if (imageData[i + 3] === 0) count++;
+    function checkProgress() {
+        // Muestreo optimizado de pixeles transparentes
+        const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+        let transparent = 0;
+        for (let i = 3; i < data.length; i += 400) { // Salto de 100 pixeles para velocidad
+            if (data[i] === 0) transparent++;
         }
-        if (count > (imageData.length / 100) * 0.4) { // Si limpió el 40%
+        if (transparent > (data.length / 400) * 0.35) {
             sealArea.classList.add('visible');
-            document.getElementById('instructions').innerText = '¡Ahora presiona el sello de lacre!';
-            document.getElementById('instructions').style.color = 'var(--pucp)';
+            document.getElementById('instructions').innerText = '¡Mantenlo presionado para sellar tu diploma!';
+            document.getElementById('instructions').style.color = '#ffcc00';
         }
     }
 
+    // Eventos Mouse
+    canvas.addEventListener('mousedown', () => isDrawing = true);
     canvas.addEventListener('mousemove', scratch);
+    window.addEventListener('mouseup', () => isDrawing = false);
+
+    // Eventos Touch (Celular)
+    canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); });
     canvas.addEventListener('touchmove', (e) => { e.preventDefault(); scratch(e); }, {passive: false});
+    canvas.addEventListener('touchend', () => isDrawing = false);
 
-    // Lógica del sello
-    let holdTimer;
-    sealArea.addEventListener('mousedown', startHold);
-    sealArea.addEventListener('touchstart', (e) => { e.preventDefault(); startHold(); });
-    sealArea.addEventListener('mouseup', clearHold);
-    sealArea.addEventListener('touchend', clearHold);
-
-    function startHold() {
-        holdTimer = setTimeout(() => {
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+    // Lógica del Sello (Compatible con ambos)
+    let timer;
+    function startSeal() {
+        timer = setTimeout(() => {
+            confetti({ particleCount: 250, spread: 80, origin: { y: 0.6 }, colors: ['#002d5e', '#c5a059'] });
             document.getElementById('diploma-overlay').style.display = 'flex';
-        }, 1500); // 1.5 segundos presionando
+        }, 1200);
     }
+    function endSeal() { clearTimeout(timer); }
 
-    function clearHold() {
-        clearTimeout(holdTimer);
-    }
+    sealArea.addEventListener('mousedown', startSeal);
+    sealArea.addEventListener('touchstart', (e) => { e.preventDefault(); startSeal(); });
+    sealArea.addEventListener('mouseup', endSeal);
+    sealArea.addEventListener('touchend', endSeal);
+    sealArea.addEventListener('mouseleave', endSeal);
 
+    window.addEventListener('resize', init);
     init();
 </script>
 </body>
