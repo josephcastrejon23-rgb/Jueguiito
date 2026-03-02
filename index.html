@@ -3,79 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Zarelly: Vuelo FEPUC ✨</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <title>Zarelly: Liderazgo Infinito FEPUC 🏆</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Dancing+Script:wght@700&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        :root { --pucp: #004a99; --gold: #ffcc00; --pink: #ff4d6d; }
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #001f3f; font-family: 'Montserrat', sans-serif; }
-        
-        canvas { display: block; }
+        :root { --pucp: #00e5ff; --gold: #ffcc00; --love: #ff0054; --bg: #050505; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: var(--bg); font-family: 'Montserrat', sans-serif; color: white; }
+        canvas { position: fixed; top: 0; left: 0; z-index: 1; filter: blur(0.5px); }
 
-        /* Interfaz de Usuario */
+        /* UI de Alta Tecnología */
         #ui {
-            position: fixed; top: 20px; left: 0; width: 100%; 
-            display: flex; flex-direction: column; align-items: center;
-            z-index: 10; pointer-events: none;
+            position: fixed; top: 30px; left: 0; width: 100%; 
+            display: flex; flex-direction: column; align-items: center; z-index: 10; pointer-events: none;
         }
-        .stats-container {
-            background: rgba(255, 255, 255, 0.9); padding: 10px 25px;
-            border-radius: 50px; border: 2px solid var(--pucp);
-            box-shadow: 0 0 20px rgba(255,204,0,0.4);
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px);
+            padding: 15px 40px; border-radius: 100px; border: 1px solid rgba(0, 229, 255, 0.3);
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.2); text-align: center;
         }
-        #score-txt { color: var(--pucp); font-weight: 800; font-size: 1.1rem; }
+        #score-label { font-family: 'Orbitron', sans-serif; font-size: 0.8rem; letter-spacing: 3px; color: var(--pucp); margin-bottom: 5px; }
+        .progress-bar { width: 200px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; }
+        #fill { width: 0%; height: 100%; background: linear-gradient(90deg, var(--pucp), var(--gold)); transition: 0.3s; box-shadow: 0 0 15px var(--pucp); }
 
         /* Pantallas */
-        .overlay {
-            position: fixed; inset: 0; background: radial-gradient(circle, #004a99, #001f3f);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 100; color: white; text-align: center; padding: 25px;
+        .overlay { position: fixed; inset: 0; z-index: 100; display: flex; justify-content: center; align-items: center; text-align: center; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); transition: 0.5s; }
+        .card { 
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%);
+            padding: 50px; border-radius: 40px; border: 1px solid rgba(255,255,255,0.1);
+            max-width: 500px; position: relative; overflow: hidden;
         }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);
-            padding: 40px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.2);
-            max-width: 450px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        }
-        .btn {
-            background: var(--gold); color: #002d5e; border: none;
-            padding: 18px 45px; border-radius: 50px; font-size: 1.2rem;
-            font-weight: bold; cursor: pointer; margin-top: 25px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2); transition: 0.3s;
-        }
-        .btn:hover { transform: scale(1.1); box-shadow: 0 15px 30px var(--gold); }
+        .card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, var(--pucp), transparent); animation: rotate 4s linear infinite; z-index: -1; opacity: 0.3; }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        #joy-hint {
-            position: fixed; bottom: 30px; width: 100%; text-align: center;
-            color: rgba(255,255,255,0.6); font-size: 0.8rem; z-index: 5;
+        .btn {
+            background: var(--pucp); color: #000; border: none; padding: 18px 50px; 
+            border-radius: 50px; font-family: 'Orbitron', sans-serif; font-weight: 900;
+            cursor: pointer; margin-top: 30px; transition: 0.3s; box-shadow: 0 0 20px var(--pucp);
         }
+        .btn:hover { transform: scale(1.1) rotate(-2deg); box-shadow: 0 0 40px var(--pucp); }
+
+        /* Final Letter */
+        #final-letter { display: none; }
+        .letter-text { font-family: 'Dancing Script', cursive; font-size: 2rem; color: #fff; line-height: 1.4; text-shadow: 0 0 10px var(--pucp); }
     </style>
 </head>
 <body>
 
 <div id="ui">
-    <div class="stats-container">
-        <span id="score-txt">Poder de Delegada: 0%</span>
+    <div class="glass-panel">
+        <div id="score-label">IMPULSO FEPUC</div>
+        <div class="progress-bar"><div id="fill"></div></div>
     </div>
 </div>
-
-<div id="joy-hint">Arrastra tu dedo por toda la pantalla para moverte ✨</div>
 
 <div id="start-screen" class="overlay">
-    <div class="glass-card">
-        <h1 style="font-family:'Dancing Script'; font-size: 3.5rem; color: var(--gold);">¡Felicidades, Zarelly!</h1>
-        <p>Como nueva <b>Delegada FEPUC</b>, el cielo es el límite. Recolecta las estrellas de éxito y los mensajes de amor de José.</p>
-        <button class="btn" onclick="startGame()">¡A VOLAR! 🚀</button>
+    <div class="card">
+        <h1 style="font-family:'Orbitron'; font-size: 2.2rem; color: var(--pucp);">ZARELLY PROTOCOL</h1>
+        <p style="opacity: 0.8; line-height: 1.6;">Bienvenida, <b>Delegada FEPUC</b>. <br> Navega por el espacio estudiantil, recolecta éxitos y desbloquea el mensaje de José.</p>
+        <button class="btn" onclick="initGame()">INICIAR SISTEMA</button>
     </div>
 </div>
 
-<div id="win-screen" class="overlay" style="display:none;">
-    <div class="glass-card">
-        <h2 style="font-family:'Dancing Script'; font-size: 3rem; color: var(--gold);">¡Gestión Exitosa!</h2>
-        <p style="font-size: 1.1rem; line-height: 1.8;">
-            Zarelly, has demostrado que tienes todo para liderar con el corazón. <br><br>
-            Ser <b>Delegada</b> es un reto grande, pero tú eres más grande que cualquier obstáculo. Estoy tan orgulloso de ti, mi amor. ¡Vamos por un año increíble en la FEPUC! ❤️
-        </p>
-        <button class="btn" onclick="location.reload()">TE AMO INFINITO</button>
+<div id="final-screen" class="overlay" style="display:none;">
+    <div class="card">
+        <h1 style="font-family:'Dancing Script'; font-size: 3.5rem; color: var(--gold); margin-bottom:10px;">¡Lo lograste!</h1>
+        <div class="letter-text">
+            Zarelly, hoy no solo ganaste un cargo, ganaste la oportunidad de demostrar lo que yo ya sé: <b>que eres increíble.</b><br><br>
+            Ser Delegada es solo el inicio de todas las cosas grandes que vas a lograr. ¡Te amo infinito y estoy aquí para ti siempre!
+        </div>
+        <button class="btn" onclick="location.reload()">TE AMO ❤️</button>
     </div>
 </div>
 
@@ -84,137 +80,137 @@
 <script>
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
-    const scoreTxt = document.getElementById('score-txt');
-
-    let gameActive = false;
     let score = 0;
-    let player = { x: 100, y: 100, size: 50, targetX: 100, targetY: 100 };
-    let objects = [];
-    let bgStars = [];
+    let active = false;
+    let particles = [];
+    let player = { x: 100, y: 100, tx: 100, ty: 100, trail: [] };
+    let items = [];
 
-    function init() {
+    function setup() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        player.y = canvas.height / 2;
-        player.targetY = player.y;
-        
-        // Estrellas de fondo
-        bgStars = Array(70).fill().map(() => ({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            s: Math.random() * 2,
-            v: Math.random() * 1 + 0.5
-        }));
+        // Fondo de estrellas
+        for(let i=0; i<150; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                z: Math.random() * canvas.width,
+                o: Math.random()
+            });
+        }
     }
-    window.addEventListener('resize', init);
-    init();
 
-    // Controles táctiles y mouse (Toda la pantalla)
-    const handleMove = (e) => {
-        if(!gameActive) return;
+    function initGame() {
+        document.getElementById('start-screen').style.opacity = '0';
+        setTimeout(() => {
+            document.getElementById('start-screen').style.display = 'none';
+            active = true;
+            spawn();
+            render();
+        }, 500);
+    }
+
+    // Controles Fluidos
+    const move = (e) => {
         const x = e.touches ? e.touches[0].clientX : e.clientX;
         const y = e.touches ? e.touches[0].clientY : e.clientY;
-        player.targetX = x - player.size/2;
-        player.targetY = y - player.size/2;
+        player.tx = x;
+        player.ty = y;
     };
-    window.addEventListener('mousemove', handleMove);
-    window.addEventListener('touchmove', (e) => { e.preventDefault(); handleMove(e); }, {passive: false});
+    window.addEventListener('mousemove', move);
+    window.addEventListener('touchmove', (e) => { e.preventDefault(); move(e); }, {passive: false});
 
-    function startGame() {
-        document.getElementById('start-screen').style.display = 'none';
-        gameActive = true;
-        animate();
-        spawnItems();
-    }
-
-    function spawnItems() {
-        if(!gameActive) return;
-        const items = ['⭐', '🎓', '❤️', '✨', '💎'];
-        objects.push({
-            x: canvas.width + 50,
-            y: Math.random() * (canvas.height - 50),
-            t: items[Math.floor(Math.random() * items.length)],
-            s: Math.random() * 2 + 3
+    function spawn() {
+        if(!active) return;
+        items.push({
+            x: canvas.width + 100,
+            y: Math.random() * canvas.height,
+            char: ['🎓', '⭐', '✨', '💎', '❤️'][Math.floor(Math.random()*5)],
+            s: Math.random() * 4 + 4
         });
-        setTimeout(spawnItems, 800);
+        setTimeout(spawn, 600);
     }
 
-    function animate() {
-        if(!gameActive) return;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Fondo Espacial/PUCP
-        let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-        gradient.addColorStop(0, '#001f3f');
-        gradient.addColorStop(1, '#004a99');
-        ctx.fillStyle = gradient;
+    function render() {
+        if(!active) return;
+        // Limpieza con rastro
+        ctx.fillStyle = 'rgba(5, 5, 5, 0.2)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Estrellas parallax
-        ctx.fillStyle = "white";
-        bgStars.forEach(s => {
+        // Estrellas 3D
+        particles.forEach(p => {
+            p.z -= 2;
+            if(p.z <= 0) p.z = canvas.width;
+            let sx = (p.x - canvas.width/2) * (canvas.width/p.z) + canvas.width/2;
+            let sy = (p.y - canvas.height/2) * (canvas.width/p.z) + canvas.height/2;
+            let size = (1 - p.z/canvas.width) * 3;
+            ctx.fillStyle = `rgba(0, 229, 255, ${1 - p.z/canvas.width})`;
             ctx.beginPath();
-            ctx.arc(s.x, s.y, s.s, 0, Math.PI*2);
+            ctx.arc(sx, sy, size, 0, Math.PI*2);
             ctx.fill();
-            s.x -= s.v;
-            if(s.x < 0) s.x = canvas.width;
         });
 
-        // Movimiento suave del personaje
-        player.x += (player.targetX - player.x) * 0.1;
-        player.y += (player.targetY - player.y) * 0.1;
+        // Suavizado de posición del jugador
+        player.x += (player.tx - player.x) * 0.15;
+        player.y += (player.ty - player.y) * 0.15;
 
-        // Dibujar a Zarelly (Avatar Líder)
-        ctx.font = "50px serif";
-        ctx.shadowBlur = 15;
-        ctx.shadowColor = "rgba(255,204,0,0.8)";
-        ctx.fillText("👸", player.x, player.y);
-        ctx.font = "20px serif";
-        ctx.fillText("🎓", player.x + 30, player.y - 10);
+        // Trail del jugador
+        player.trail.push({x: player.x, y: player.y, o: 1});
+        if(player.trail.length > 20) player.trail.shift();
+        player.trail.forEach((t, i) => {
+            t.o -= 0.05;
+            ctx.font = "20px Arial";
+            ctx.globalAlpha = t.o;
+            ctx.fillText("✨", t.x - 10, t.y + 10);
+        });
+        ctx.globalAlpha = 1;
+
+        // Dibujar Zarelly (Efecto Neón)
+        ctx.shadowBlur = 20;
+        ctx.shadowColor = varColor();
+        ctx.font = "60px serif";
+        ctx.fillText("👸", player.x - 30, player.y + 20);
+        ctx.font = "25px Orbitron";
+        ctx.fillStyle = "white";
+        ctx.fillText("DELEGADA", player.x - 45, player.y + 55);
         ctx.shadowBlur = 0;
 
-        // Objetos
-        objects.forEach((obj, i) => {
-            obj.x -= obj.s;
-            ctx.font = "35px serif";
-            ctx.fillText(obj.t, obj.x, obj.y);
+        // Items y Colisiones
+        items.forEach((item, i) => {
+            item.x -= item.s;
+            ctx.font = "40px Arial";
+            ctx.fillText(item.char, item.x, item.y);
 
-            // Colisión precisa
-            let dx = (obj.x - player.x);
-            let dy = (obj.y - player.y);
-            let distance = Math.sqrt(dx*dx + dy*dy);
-
-            if(distance < 50) {
-                objects.splice(i, 1);
-                score += 2;
-                scoreTxt.innerText = `Poder de Delegada: ${Math.min(score, 100)}%`;
-                
-                // Mini confeti al recolectar
-                confetti({
-                    origin: { x: obj.x/window.innerWidth, y: obj.y/window.innerHeight },
-                    particleCount: 5, spread: 20, gravity: 1, ticks: 30, colors: ['#ffcc00']
-                });
-
-                if(score >= 100) win();
+            let d = Math.hypot(item.x - player.x, item.y - player.y);
+            if(d < 60) {
+                items.splice(i, 1);
+                score += 4;
+                document.getElementById('fill').style.width = score + '%';
+                // Impacto Confeti
+                confetti({ origin: { x: item.x/canvas.width, y: item.y/canvas.height }, particleCount: 10, colors: [varColor()] });
+                if(score >= 100) victory();
             }
-
-            if(obj.x < -50) objects.splice(i, 1);
+            if(item.x < -100) items.splice(i, 1);
         });
 
-        requestAnimationFrame(animate);
+        requestAnimationFrame(render);
     }
 
-    function win() {
-        gameActive = false;
-        document.getElementById('win-screen').style.display = 'flex';
-        var end = Date.now() + (7 * 1000);
+    function varColor() { return score < 50 ? '#00e5ff' : '#ffcc00'; }
+
+    function victory() {
+        active = false;
+        document.getElementById('final-screen').style.display = 'flex';
+        // Fuegos artificiales de victoria
+        var end = Date.now() + (10 * 1000);
         (function frame() {
-            confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#004a99', '#ffcc00'] });
-            confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#004a99', '#ffcc00'] });
+            confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#00e5ff', '#ffcc00'] });
+            confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#00e5ff', '#ffcc00'] });
             if (Date.now() < end) requestAnimationFrame(frame);
         }());
     }
-</script>
 
+    setup();
+</script>
 </body>
 </html>
