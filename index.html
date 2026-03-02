@@ -10,7 +10,7 @@
         :root { --gold: #d4af37; --pucp: #002d5e; --white: #ffffff; --pink: #ff4d6d; }
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; overflow: hidden; font-family: 'Montserrat', sans-serif; color: white; }
 
-        /* Pantalla Elegante de Inicio */
+        /* Pantalla de Inicio */
         #start-screen {
             position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center;
             background: radial-gradient(circle, #1a1a1a 0%, #000 100%); transition: 1.5s;
@@ -66,9 +66,7 @@
             text-align: center; box-shadow: 0 0 100px black;
         }
         .diploma h1 { font-family: 'Cinzel'; color: var(--pucp); font-size: 1.8rem; margin: 0; }
-        .diploma .name { font-family: 'Dancing Script'; font-size: 2.5rem; color: #b08d57; margin: 15px 0; font-weight: bold; }
-        .diploma p { line-height: 1.6; font-size: 1rem; color: #333; }
-        
+        .diploma .name { font-family: 'Dancing Script'; font-size: 2.3rem; color: #b08d57; margin: 15px 0; font-weight: bold; }
         .footer-love { margin-top: 30px; border-top: 1px solid #333; display: inline-block; padding-top: 10px; font-family: 'Dancing Script'; font-size: 1.8rem; }
     </style>
 </head>
@@ -91,7 +89,7 @@
             <div class="card-icon">🎓</div>
             <div class="card-title">DELEGADA<br>FEPUC</div>
             <div class="card-name">ZARELLY DAYANNE</div>
-            <div style="font-size: 0.8rem; letter-spacing: 2px; color: var(--gold); margin-top: 10px;">PRECIOSA</div>
+            <div style="font-size: 0.8rem; letter-spacing: 2px; color: var(--gold); margin-top: 10px;">VAMOOOOS MI AMOOOOR</div>
             <div style="margin-top: auto; padding-bottom: 30px; font-size: 0.7rem; letter-spacing: 3px; color: var(--gold); opacity: 0.8;">GESTIÓN 2026</div>
         </div>
     </div>
@@ -106,9 +104,7 @@
             Reconocida oficialmente como <b>Delegada FEPUC</b>. <br><br>
             Este diploma certifica que no solo tienes el respaldo de tus compañeros, sino también toda mi admiración. ¡Tú puedes preciosa! harás una gestión increíble.
         </p>
-        <div class="footer-love">
-            José, con todo mi amor.
-        </div>
+        <div class="footer-love">José, con todo mi amor.</div>
         <br>
         <button onclick="location.reload()" style="background: var(--pucp); color: white; border: none; padding: 10px 20px; margin-top: 25px; cursor: pointer; font-family: 'Cinzel'; border-radius: 4px;">FINALIZAR ❤️</button>
     </div>
@@ -124,6 +120,24 @@
         }, 1200);
     }
 
+    function fireworkBurst() {
+        var duration = 5 * 1000;
+        var animationEnd = Date.now() + duration;
+        var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 200 };
+
+        function randomInRange(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        var interval = setInterval(function() {
+            var timeLeft = animationEnd - Date.now();
+            if (timeLeft <= 0) { return clearInterval(interval); }
+            var particleCount = 50 * (timeLeft / duration);
+            confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+            confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+        }, 250);
+    }
+
     function runSteps() {
         const steps = ['step1', 'step2', 'step3', 'step4', 'step5'];
         let delay = 0;
@@ -132,10 +146,9 @@
             setTimeout(() => {
                 document.getElementById(id).classList.add('animate-step');
             }, delay);
-            delay += 2800; // Tiempo suficiente para leer cada frase
+            delay += 2800;
         });
 
-        // Revelación de la Tarjeta de Honor
         setTimeout(() => {
             const card = document.getElementById('honor-card');
             card.style.display = 'flex';
@@ -144,23 +157,17 @@
                 { transform: 'scale(1) translateY(0)', opacity: 1 }
             ], { duration: 1200, easing: 'ease-out' });
 
-            // Celebración máxima
             confetti({
-                particleCount: 400,
-                spread: 100,
+                particleCount: 200,
+                spread: 70,
                 origin: { y: 0.6 },
-                colors: ['#d4af37', '#ffffff', '#002d5e', '#ff4d6d']
+                colors: ['#d4af37', '#ffffff', '#002d5e']
             });
         }, delay);
 
-        // Revelar Diploma final
         setTimeout(() => {
-            const dip = document.getElementById('diploma-screen');
-            dip.style.display = 'flex';
-            document.getElementById('final-diploma').animate([
-                { transform: 'scale(0.8) translateY(20px)', opacity: 0 },
-                { transform: 'scale(1) translateY(0)', opacity: 1 }
-            ], { duration: 1000, easing: 'ease-out' });
+            document.getElementById('diploma-screen').style.display = 'flex';
+            fireworkBurst(); // Los fuegos artificiales continuos
         }, delay + 5000);
     }
 </script>
