@@ -2,191 +2,160 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Acreditación Oficial: Zarelly 🎓</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Dancing+Script:wght@700&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zarelly: Official Walkout 🎓</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Cinzel:wght@700&family=Montserrat:wght@300;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        :root { --pucp: #002d5e; --gold: #c5a059; --bg: #1a1a1a; }
-        body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100%; 
-            overflow: hidden; background: var(--bg); 
-            font-family: 'Montserrat', sans-serif;
-            user-select: none; -webkit-user-select: none;
-        }
-        
-        /* Capa de Limpieza */
-        #scratch-container { position: absolute; inset: 0; z-index: 20; touch-action: none; }
-        #canvas-fog { width: 100%; height: 100%; cursor: url('https://cur.cursors-4u.net/others/oth-2/oth191.cur'), auto; }
+        :root { --gold: #ffd700; --pucp: #004a99; --dark: #050505; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--dark); overflow: hidden; font-family: 'Montserrat', sans-serif; color: white; }
 
-        /* Contenido Revelado */
-        #under-content {
-            position: absolute; inset: 0; z-index: 10;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            background: #fdfbf0; color: #333; text-align: center; padding: 20px;
+        /* Pantalla de Inicio */
+        #start-screen {
+            position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center;
+            background: radial-gradient(circle, #1a1a1a 0%, #000 100%); transition: 1s;
         }
+        .enter-btn {
+            padding: 20px 60px; font-family: 'Orbitron', sans-serif; font-size: 1.5rem;
+            color: var(--gold); border: 2px solid var(--gold); background: transparent;
+            cursor: pointer; letter-spacing: 5px; transition: 0.3s;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        }
+        .enter-btn:hover { background: var(--gold); color: black; box-shadow: 0 0 50px var(--gold); }
 
-        .header-pucp { font-family: 'Cinzel'; color: var(--pucp); font-size: 1.1rem; letter-spacing: 3px; border-bottom: 2px solid var(--gold); padding-bottom: 10px; margin-bottom: 20px; }
-        
-        /* Área del Sello Dinámica */
-        #seal-area {
-            width: 140px; height: 140px; border: 3px solid var(--gold);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            margin: 20px auto; position: relative; cursor: pointer;
-            transition: all 0.5s ease; opacity: 0; transform: scale(0.8);
-        }
-        #seal-area.visible { opacity: 1; transform: scale(1); animation: pulse 2s infinite; }
-        
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(197, 160, 89, 0.7); }
-            70% { box-shadow: 0 0 0 20px rgba(197, 160, 89, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(197, 160, 89, 0); }
+        /* Secuencia Walkout */
+        #walkout-sequence {
+            position: fixed; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center;
+            background: black; z-index: 50;
         }
 
-        .seal-wax {
-            width: 110px; height: 110px; background: #8b0000; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; color: var(--gold);
-            font-family: 'Cinzel'; font-size: 2.2rem; transition: 0.2s;
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
+        .reveal-step {
+            font-family: 'Orbitron', sans-serif; font-size: 3rem; color: white;
+            text-shadow: 0 0 20px var(--gold); opacity: 0; transform: scale(0.5);
+            position: absolute; text-align: center;
         }
-        #seal-area:active .seal-wax { transform: scale(0.9); background: #600000; }
 
-        /* Diploma Estilo Pergamino */
-        #diploma-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.9);
-            z-index: 100; display: none; align-items: center; justify-content: center; padding: 15px;
+        /* Animaciones FIFA */
+        @keyframes walkoutReveal {
+            0% { opacity: 0; transform: scale(0.5) translateY(20px); filter: blur(10px); }
+            50% { opacity: 1; transform: scale(1.1) translateY(0); filter: blur(0px); }
+            100% { opacity: 0; transform: scale(1.2) translateY(-20px); filter: blur(10px); }
+        }
+
+        .animate-text { animation: walkoutReveal 2s forwards; }
+
+        /* Carta Final FIFA */
+        #fifa-card {
+            width: 280px; height: 400px; background: linear-gradient(135deg, #ffd700 0%, #b8860b 50%, #ffd700 100%);
+            border-radius: 10px; position: relative; display: none; flex-direction: column;
+            align-items: center; padding: 20px; color: #333; box-shadow: 0 0 100px var(--gold);
+            clip-path: polygon(10% 0, 90% 0, 100% 15%, 100% 85%, 90% 100%, 10% 100%, 0 85%, 0 15%);
+        }
+
+        .fifa-pos { font-family: 'Orbitron'; font-size: 2rem; font-weight: bold; margin-top: 40px; }
+        .fifa-badge { font-size: 4rem; margin: 10px 0; }
+        .fifa-name { font-family: 'Orbitron'; font-size: 1.5rem; font-weight: bold; text-transform: uppercase; border-top: 2px solid #333; padding-top: 10px; }
+
+        /* Diploma Final */
+        #diploma-screen {
+            position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
+            background: rgba(0,0,0,0.95); z-index: 150; padding: 20px;
         }
         .diploma {
-            background: #fff; width: 100%; max-width: 650px; padding: 40px;
-            border: 20px solid var(--pucp); outline: 5px solid var(--gold);
-            outline-offset: -15px; position: relative; text-align: center;
-            box-shadow: 0 0 50px rgba(0,0,0,1);
+            background: #fff; width: 100%; max-width: 600px; padding: 40px; color: #222;
+            border: 15px solid var(--pucp); border-image: linear-gradient(to bottom, var(--pucp), #001a33) 1;
+            text-align: center; position: relative; box-shadow: 0 0 50px black;
         }
-        .diploma h1 { font-family: 'Cinzel'; color: var(--pucp); font-size: 2.2rem; margin: 10px 0; }
-        .diploma .name { font-family: 'Dancing Script'; font-size: 3.5rem; color: var(--gold); margin: 20px 0; }
-        .diploma p { line-height: 1.8; font-size: 1.1rem; color: #222; max-width: 80%; margin: 0 auto; }
-
-        #instructions { 
-            position: fixed; bottom: 30px; width: 100%; text-align: center; 
-            color: white; z-index: 30; pointer-events: none; 
-            font-size: 0.9rem; letter-spacing: 1px;
-            background: rgba(0,0,0,0.5); padding: 10px 0;
-        }
+        .diploma h1 { font-family: 'Cinzel'; color: var(--pucp); font-size: 2rem; margin: 0; }
+        .diploma .name { font-family: 'Dancing Script'; font-size: 3.5rem; color: #b8860b; margin: 20px 0; }
+        .diploma p { line-height: 1.6; font-size: 1.1rem; }
     </style>
 </head>
 <body>
 
-<div id="instructions">Usa tu dedo o mouse para limpiar el camino hacia tu éxito...</div>
+<div id="start-screen">
+    <button class="btn enter-btn" onclick="runWalkout()">ENTER</button>
+</div>
 
-<div id="under-content">
-    <div class="header-pucp">RECONOCIMIENTO ESTUDIANTIL</div>
-    <p style="font-weight: 600; color: #555;">Mi Zazita, tu esfuerzo ha dado frutos.<br>Oficializa tu cargo manteniendo presionado el sello.</p>
+<div id="walkout-sequence">
+    <div id="step-pos" class="reveal-step">POS: DELEGADA</div>
+    <div id="step-club" class="reveal-step">FEPUC</div>
+    <div id="step-flag" class="reveal-step">PUCP</div>
     
-    <div id="seal-area">
-        <div class="seal-wax">Z</div>
+    <div id="fifa-card">
+        <div class="fifa-pos">DEL</div>
+        <div class="fifa-badge">🎓</div>
+        <div class="fifa-name">ZARELLY</div>
+        <div style="font-size: 0.8rem; margin-top: 20px; font-weight: bold;">RATING: 99</div>
     </div>
 </div>
 
-<div id="scratch-container">
-    <canvas id="canvas-fog"></canvas>
-</div>
-
-<div id="diploma-overlay">
+<div id="diploma-screen">
     <div class="diploma">
-        <div style="font-size: 0.7rem; letter-spacing: 5px; color: #888;">CREDITACIÓN FEPUC 2026</div>
+        <h2 style="font-size: 0.7rem; letter-spacing: 5px; color: #888;">NOMBRAMIENTO OFICIAL</h2>
         <h1>DIPLOMA DE EXCELENCIA</h1>
         <div class="name">Zarelly</div>
         <p>
-            Se otorga el presente reconocimiento por su destacada labor y nombramiento como <b>Delegada FEPUC 2026</b>. <br><br>
-            Tu liderazgo es la mezcla perfecta entre inteligencia y empatía. Estoy seguro de que harás una gestión impecable mi amor. Te amo y estoy orgulloso de ti :3.
+            Reconocida oficialmente como <b>Delegada FEPUC</b>. <br><br>
+            Este cargo es el reflejo de tu liderazgo, tu inteligencia y el gran corazón que pones en todo lo que haces. <br> ¡Orgulloso de ti hoy y siempre!
         </p>
-        <div style="margin-top: 40px; font-family: 'Dancing Script'; font-size: 1.8rem; border-top: 1px solid #333; display: inline-block; padding-top: 5px;">
-            José
+        <div style="margin-top: 30px; border-top: 1px solid #333; display: inline-block; padding-top: 10px; font-family: 'Dancing Script'; font-size: 1.8rem;">
+            José, tu fan #1
         </div>
         <br>
-        <button onclick="location.reload()" style="margin-top:25px; border:none; background:var(--gold); color:white; padding:10px 30px; cursor:pointer; font-family:'Cinzel';">VOLVER ❤️</button>
+        <button onclick="location.reload()" style="background: var(--pucp); color: white; border: none; padding: 10px 20px; margin-top: 20px; cursor: pointer; font-family: 'Orbitron';">CERRAR</button>
     </div>
 </div>
 
 <script>
-    const canvas = document.getElementById('canvas-fog');
-    const ctx = canvas.getContext('2d');
-    const sealArea = document.getElementById('seal-area');
-    let isDrawing = false;
-
-    function init() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        ctx.fillStyle = '#222'; // Niebla más elegante
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
-        // Efecto de texto oculto en la niebla
-        ctx.font = 'bold 15px Montserrat';
-        ctx.fillStyle = '#333';
-        ctx.textAlign = 'center';
-        ctx.fillText('TRABAJO • LIDERAZGO • COMPROMISO', canvas.width/2, canvas.height/2);
+    function runWalkout() {
+        // Ocultar inicio
+        document.getElementById('start-screen').style.opacity = '0';
+        setTimeout(() => {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('walkout-sequence').style.display = 'flex';
+            sequence();
+        }, 1000);
     }
 
-    function getPos(e) {
-        const rect = canvas.getBoundingClientRect();
-        return {
-            x: (e.touches ? e.touches[0].clientX : e.clientX) - rect.left,
-            y: (e.touches ? e.touches[0].clientY : e.clientY) - rect.top
-        };
+    function sequence() {
+        const steps = ['step-pos', 'step-flag', 'step-club'];
+        let delay = 0;
+
+        steps.forEach((id, index) => {
+            setTimeout(() => {
+                document.getElementById(id).classList.add('animate-text');
+            }, delay);
+            delay += 2200;
+        });
+
+        // Revelar Carta FIFA
+        setTimeout(() => {
+            const card = document.getElementById('fifa-card');
+            card.style.display = 'flex';
+            card.animate([
+                { transform: 'scale(0) rotate(720deg)', opacity: 0 },
+                { transform: 'scale(1) rotate(0deg)', opacity: 1 }
+            ], { duration: 1000, easing: 'ease-out' });
+
+            // Explosión de Confeti
+            setTimeout(() => {
+                confetti({
+                    particleCount: 400,
+                    spread: 100,
+                    origin: { y: 0.6 },
+                    colors: ['#ffd700', '#ffffff', '#004a99']
+                });
+            }, 500);
+
+        }, delay);
+
+        // Revelar Diploma final
+        setTimeout(() => {
+            document.getElementById('diploma-screen').style.display = 'flex';
+        }, delay + 4000);
     }
-
-    function scratch(e) {
-        if (!isDrawing && e.type !== 'touchmove') return;
-        const pos = getPos(e);
-        ctx.globalCompositeOperation = 'destination-out';
-        ctx.beginPath();
-        ctx.arc(pos.x, pos.y, 45, 0, Math.PI * 2);
-        ctx.fill();
-        checkProgress();
-    }
-
-    function checkProgress() {
-        // Muestreo optimizado de pixeles transparentes
-        const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-        let transparent = 0;
-        for (let i = 3; i < data.length; i += 400) { // Salto de 100 pixeles para velocidad
-            if (data[i] === 0) transparent++;
-        }
-        if (transparent > (data.length / 400) * 0.35) {
-            sealArea.classList.add('visible');
-            document.getElementById('instructions').innerText = '¡Mantenlo presionado para sellar tu diploma!';
-            document.getElementById('instructions').style.color = '#ffcc00';
-        }
-    }
-
-    // Eventos Mouse
-    canvas.addEventListener('mousedown', () => isDrawing = true);
-    canvas.addEventListener('mousemove', scratch);
-    window.addEventListener('mouseup', () => isDrawing = false);
-
-    // Eventos Touch (Celular)
-    canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); });
-    canvas.addEventListener('touchmove', (e) => { e.preventDefault(); scratch(e); }, {passive: false});
-    canvas.addEventListener('touchend', () => isDrawing = false);
-
-    // Lógica del Sello (Compatible con ambos)
-    let timer;
-    function startSeal() {
-        timer = setTimeout(() => {
-            confetti({ particleCount: 250, spread: 80, origin: { y: 0.6 }, colors: ['#002d5e', '#c5a059'] });
-            document.getElementById('diploma-overlay').style.display = 'flex';
-        }, 1200);
-    }
-    function endSeal() { clearTimeout(timer); }
-
-    sealArea.addEventListener('mousedown', startSeal);
-    sealArea.addEventListener('touchstart', (e) => { e.preventDefault(); startSeal(); });
-    sealArea.addEventListener('mouseup', endSeal);
-    sealArea.addEventListener('touchend', endSeal);
-    sealArea.addEventListener('mouseleave', endSeal);
-
-    window.addEventListener('resize', init);
-    init();
 </script>
+
 </body>
 </html>
